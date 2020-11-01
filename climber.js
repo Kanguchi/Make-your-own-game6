@@ -1,5 +1,5 @@
 function climber(x, y, k){   
-    for (i = y; i<k; i = i+20){
+    for (i = y; i<k; i = i+18){
         var climberObj = createSprite(x, i, 20, 20);
         climberObj.shapeColor = "orange";
         climberObj.addImage(ballImg);
