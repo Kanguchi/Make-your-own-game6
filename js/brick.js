@@ -8,7 +8,7 @@ class Brick{
     display(){
         //rectMode(CENTER);
         var brickObj = createSprite(this.x, this.y, this.width, this.height);
-        brickObj.shapeColor = "chocolate";
+        brickObj.shapeColor = "grey";
         player.collide(brickObj);
     }
 }

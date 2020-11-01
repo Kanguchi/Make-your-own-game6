@@ -8,7 +8,7 @@ class Block{
     display(){
         //rectMode(CENTER);
         var blockObj = createSprite(this.x, this.y, this.width, this.height);
-        blockObj.shapeColor = "Black";
+        blockObj.shapeColor = "black";
         player.collide(blockObj);
     }
 }
