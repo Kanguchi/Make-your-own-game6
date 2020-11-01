@@ -6,5 +6,6 @@ class Key{
     display(){
         var keys = createSprite(this.x, this.y, 20, 10);
         keys.shapeColor = "Gold";
+        player.collide(keys);
     }
 }

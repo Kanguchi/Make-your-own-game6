@@ -2,13 +2,14 @@ var grounds, ground, keys, door;
 var wall1, wall2, wall3;
 var block1, spike1, bumpyObj;
 var player;
-var img;
+var img, ballImg;
 var lava;
 
 var spikeGroup, bumpyGroup;
 
 function preload(){
   img = loadImage("player.png");
+  ballImg = loadImage("blackCircle.png");
   bgm = loadSound('BGM.mp3');
 }
 
@@ -33,7 +34,7 @@ function setup() {
   //player.debug = true;
 
   spikeGroup = new Group();
-  bumpyGroup = new Group();
+  climbGroup = new Group();
   
 }
 
@@ -46,8 +47,9 @@ function draw() {
   player.collide(edges[1]);
   player.collide(edges[2]);
   //create bgm
-  bgm.play();
-  bgm.setVolume(0.04);
+  //bgm.play();
+  //bgm.setVolume(0.04);
+  //create gravity
   player.velocityY = player.velocityY + 0.8;
 
   block1.display();
@@ -71,9 +73,10 @@ function draw() {
   if (keyDown("LEFT_ARROW")){
     player.x = player.x - 10;
   }
-  bumpyWall(350, 200, 10);
+  
   Spikes(130, 385, 180);
   
+  climber(250, 170, 400);
   drawSprites();
 
   
