@@ -2,7 +2,7 @@ var grounds, ground, keys, door;
 var wall1, wall2, wall3;
 var block1, spike1, climberObj, spikeObj;
 var player;
-var img, ballImg;
+var img, ballImg, runLeft, runRight;
 var lava;
 var PLAY, END, gameState;
 PLAY = 1;
@@ -21,6 +21,8 @@ function preload(){
   closedDoor = loadImage('images/door.png');
   bg = loadImage('images/caveBG2.png');
   bricks = loadImage('images/stoneWall.jpg');
+  runRight = loadAnimation('images/player-run1.png', 'images/player-run2.png', 'images/player-run3.png', 'images/player-run4.png');
+  runLeft = loadAnimation('images/player-run5.png', 'images/player-run6.png', 'images/player-run7.png', 'images/player-run8.png');
 }
 
 function setup() {
@@ -41,7 +43,9 @@ function setup() {
   //lava = new Lava(430, 170, 100, 20);
  
   player = createSprite(40, 330, 20, 40);
-  player.addImage(img);
+  player.addAnimation('image', img);
+  player.addAnimation("running", runRight);
+  player.addAnimation("moreRunning", runLeft);
   player.scale = 0.2;
   player.setCollider("rectangle", -5, -3, 120, 350, 0);
   //player.debug = true;
@@ -69,8 +73,10 @@ function draw() {
   block4.display();
 
   Spikes(130, 385, 180);
-  //Spikes(450, 150, 490);
+  Spikes(450, 385, 510);
   Spikes(350, 150, 490);
+  Spikes(670, 292, 710);
+  Spikes(560, 385, 640);
   climber(250, 170, 400);
 
   if (gameState === PLAY){
@@ -81,7 +87,16 @@ function draw() {
     text("go through the door to escape the cave", 380, 250);
     text("jump over the spikes ", 110, 350);
     text("using space key", 120, 360);
-    text("you can't jump on grey blocks", 580, 300);
+    text("you can't jump on grey blocks", 580, 290);
+    textFont('Verdana');
+    textSize(50);
+    stroke("Black");
+    strokeWeight(6);
+    fill('Skyblue');
+    text("Escape The Cave", 10, 60);
+    noStroke();
+    textSize(15);
+    text('left and right arrow keys to move', 20, 90);
     //create bgm
     bgm.playMode('untilDone');
     bgm.play();
@@ -96,12 +111,18 @@ function draw() {
     jumpSound.setVolume(0.1);
     jumpSound.play();
     }
-    if (keyDown("RIGHT_ARROW")){
-      player.x = player.x + 10;
-    }
+  
     if (keyDown("LEFT_ARROW")){
       player.x = player.x - 10;
+      player.changeAnimation("moreRunning", runLeft);
+
+    } else if (keyDown("RIGHT_ARROW")){
+      player.x = player.x + 10;
+      player.changeAnimation("running", runRight);
+    } else {
+      player.changeAnimation('image', img);
     }
+
     if(player.isTouching(climbGroup) && keyDown("space")) {
       player.y = 125;
     }  
@@ -120,11 +141,11 @@ function draw() {
       lose.play();
     } 
   }else if (gameState === END){
-    textSize(30);
+    textSize(40);
     fill(68, 225, 0 );
     strokeWeight(3.5);
     stroke(68, 225, 0 );
-    text("YOU ESCAPED!", 250, 100);
+    text("YOU ESCAPED!", 200, 100);
     bgm.pause();
     player.destroy();
   }
