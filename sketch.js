@@ -1,10 +1,10 @@
 var grounds, ground, keys, door;
 var deaths = 0;
 var wall1, wall2, wall3;
-var block1, spike1, climberObj, spikeObj;
+var block1, climberObj;
 var player;
-var img, ballImg, runLeft, runRight;
-var lava;
+var img, ballImg, runLeft, runRight, wallImg;
+var lava1, bumpyWall;
 var gameState = 'startState';
 
 
@@ -21,6 +21,7 @@ function preload(){
   bricks = loadImage('images/stoneWall.jpg');
   runRight = loadAnimation('images/player-run1.png', 'images/player-run2.png', 'images/player-run3.png', 'images/player-run4.png');
   runLeft = loadAnimation('images/player-run5.png', 'images/player-run6.png', 'images/player-run7.png', 'images/player-run8.png');
+  wallImg = loadImage('images/wall.png');
 }
 
 function setup() {
@@ -30,7 +31,7 @@ function setup() {
   block3 = new Brick(680, 310, 100, 15,0);
   block4 = new Brick(400, 350, 90, 15, 0);
 
-  ground = createSprite(350, 400, 750, 10);
+  ground = createSprite(350, 400, 750, 20);
   ground.shapeColor = "Black"
   
   door = createSprite(380, 307, 50, 70);
@@ -38,12 +39,17 @@ function setup() {
   door.addImage(closedDoor);
   door.scale = 0.3;
 
-  //lava = new Lava(430, 170, 100, 20);
- 
+  bumpyWall = createSprite(250, 280.5, 10, 200);
+  bumpyWall.addImage(wallImg);
+  bumpyWall.scale = 0.7;
+  bumpyWall.setCollider('rectangle', 0, 10, 40, 360, 0);
+  //bumpyWall.debug = true;
+  
+
+  
   spawnPlayer();
   //player.debug = true;
-  climbGroup = new Group;
-  spikeGroup = new Group;
+  lavaGroup = new Group;
 }
 
 function draw() {
@@ -65,6 +71,7 @@ function draw() {
   player.collide(edges[0]);
   player.collide(edges[1]);
   player.collide(edges[2]);
+  player.collide(bumpyWall);
   
   //create gravity
   player.velocityY = player.velocityY + 0.8;
@@ -75,12 +82,13 @@ function draw() {
   block3.display();
   block4.display();
 
-  Spikes(130, 385, 180);
-  Spikes(450, 385, 510);
-  Spikes(350, 150, 490);
-  Spikes(670, 292, 710);
-  Spikes(560, 385, 690);
-  climber(250, 170, 400);
+  lava(150, 394.9, 100);
+  lava(470, 394.9, 100);
+  lava(400, 165, 150);
+  lava(680, 308, 50);
+  lava(600, 394.9, 90);
+  
+  //climber(250, 170, 400);
   if (gameState === 'startState'){
     noStroke();
     textSize(8);
@@ -88,7 +96,7 @@ function draw() {
     text("keep pressing space and right arrow", 80, 200);
     text("while touching the wall to climb to the top", 70, 210);
     text("go through the door to escape the cave", 380, 250);
-    text("jump over the spikes ", 110, 350);
+    text("jump over the lava ", 110, 350);
     text("using space key", 120, 360);
     text("you can't jump on grey blocks", 570, 290);
     fill('skyblue');
@@ -133,7 +141,7 @@ function draw() {
       player.changeAnimation('image', img);
     }
 
-    if(player.isTouching(climbGroup) && keyDown("space")) {
+    if(player.isTouching(bumpyWall) && keyDown("space")) {
       player.y = 125;
     }  
      
@@ -144,7 +152,7 @@ function draw() {
       door.y = 309;
       door.addImage(openDoor);
     } 
-    if(player.isTouching(spikeGroup)){
+    if(player.isTouching(lavaGroup)){
       player.x = 40;
       player.y = 330;
       deaths = deaths + 1;
@@ -181,4 +189,10 @@ function spawnPlayer(){
   player.addAnimation("moreRunning", runLeft);
   player.scale = 0.2;
   player.setCollider("rectangle", -5, -3, 120, 350, 0);
+}
+
+function lava(x, y, w){
+  var lavaObj = createSprite(x, y, w, 10);
+  lavaObj.shapeColor = "red";
+  lavaGroup.add(lavaObj);
 }
