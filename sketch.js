@@ -85,7 +85,7 @@ function draw() {
   lava(150, 394.9, 100);
   lava(470, 394.9, 100);
   lava(400, 165, 150);
-  lava(680, 308, 50);
+  lava(680, 307, 50);
   lava(600, 394.9, 90);
   
   //climber(250, 170, 400);
@@ -189,6 +189,8 @@ function spawnPlayer(){
   player.addAnimation("moreRunning", runLeft);
   player.scale = 0.2;
   player.setCollider("rectangle", -5, -3, 120, 350, 0);
+  door.addImage(closedDoor);
+  door.scale = 0.3;
 }
 
 function lava(x, y, w){
